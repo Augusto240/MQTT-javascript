@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>High Voltages - MQTT</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.1.0/paho-mqtt.min.js" type="text/javascript"></script>
+    <script src="demo.js" type="text/javascript"></script>
+</head>
+<body>
+    
+    <form action="">
+        <b>Hostname or IP address and Port Number</b>
+        <input id="host" type="text" name="host" value="" placeholder="broker address">
+        <br>
+        <input id="port" type="text" name="port" value="8080">
+        <br>
+
+        <b>Username and Password</b>
+        <input id="username" name="username" placeholder="Username">
+        <br>
+        <input id="password" name="password" type="password" placeholder="Password">
+        <br>
+
+        <b>Subscription topic</b>
+        <br>
+        <input id="topic_s" name="topic_s" type="text" value="#">
+        <br>
+
+        <input type="button" value="Connect">
+        <br>
+        <input type="button" value="Disconnect">
+        <br>
+
+        <b>Publish Topic and Message</b>
+        <br>
+        <input id="topic_p" name="topic_p" value="" type="text" placeholder="Topic for publishing">
+        <br>
+        <input id="message" name="message" value="" type="text" placeholder="Message to publish">
+        <br>
+        <input type="button" value="Publish Message">
+
+
+
+    </form>
+
+</body>
+</html>
