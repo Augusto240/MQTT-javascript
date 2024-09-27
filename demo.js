@@ -1,13 +1,13 @@
 function startConnect() {
-    clientID = "clientID - " + parseInt(Math.random() * 100);
+    const clientID = "clientID - " + parseInt(Math.random() * 100);
 
-    host = document.getElementById("host").value;
-    port = document.getElementById("port").value;
-    userId = document.getElementById("username").value;
-    passwordId = document.getElementById("password").value;
+    const host = document.getElementById("host").value;
+    const port = document.getElementById("port").value;
+    const userId = document.getElementById("username").value;
+    const passwordId = document.getElementById("password").value;
 
     document.getElementById("messages").innerHTML += '<span>Conectando no servidor: ' + host + ' na porta: ' + port + '</span><br/>';
-    document.getElementById("messages").innerHTML += '<span>Usando o clienteID: ' + clientID + '</span><br/>';
+    document.getElementById("messages").innerHTML += '<span>Usando o clientID: ' + clientID + '</span><br/>';
 
     client = new Paho.Client(host, Number(port), clientID);
 
@@ -15,24 +15,26 @@ function startConnect() {
     client.onMessageArrived = onMessageArrived;
 
     client.connect({
-        onSuccess: onConnect,
+        onSuccess: onConnectSuccess,
+        onFailure: onConnectFailure,
         userName: userId,
         password: passwordId
     });
 }
 
-function onConnect() {
-    topic = document.getElementById("topic_s").value; // Corrigido aqui
-
-    document.getElementById("messages").innerHTML += '<span>Subscribing to topic ' + topic + '</span><br/>';
-
+function onConnectSuccess() {
+    const topic = document.getElementById("topic_s").value;
+    document.getElementById("messages").innerHTML += '<span>Subscrito ao tópico: ' + topic + '</span><br/>';
     client.subscribe(topic);
 }
 
+function onConnectFailure(error) {
+    document.getElementById("messages").innerHTML += '<span>Erro na conexão: ' + error.errorMessage + '</span><br/>';
+}
+
 function onConnectionLost(responseObject) {
-    document.getElementById("messages").innerHTML += '<span>Conexão perdida: ' + responseObject.errorMessage + '</span><br/>';
     if (responseObject.errorCode !== 0) {
-        document.getElementById("messages").innerHTML += '<span>ERRO: ' + responseObject.errorMessage + '</span><br/>';
+        document.getElementById("messages").innerHTML += '<span>Conexão perdida: ' + responseObject.errorMessage + '</span><br/>';
     }
 }
 
@@ -46,18 +48,17 @@ function startDisconnect() {
 }
 
 function publishMessage() {
-    const msg = document.getElementById("message").value; // Mensagem que será publicada
-    const topic = document.getElementById("topic_p").value; // Tópico para a publicação
+    const msg = document.getElementById("message").value;
+    const topic = document.getElementById("topic_p").value;
 
     if (!msg || !topic) {
         document.getElementById("messages").innerHTML += '<span>Erro: Mensagem ou tópico ausente!</span><br/>';
         return;
     }
 
-    const message = new Paho.MQTT.Message(msg);
+    const message = new Paho.Message(msg);
     message.destinationName = topic;
-
     client.send(message);
+
     document.getElementById("messages").innerHTML += '<span>Mensagem publicada: ' + msg + ' no tópico: ' + topic + '</span><br/>';
 }
-
